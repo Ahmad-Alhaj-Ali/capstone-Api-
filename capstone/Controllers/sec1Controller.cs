@@ -15,6 +15,10 @@ namespace capstone.Controllers
     public class sec1Controller : ControllerBase
     {
         private readonly FoodtekDbContext FooddbContext;
+        public sec1Controller(FoodtekDbContext FoodtekDbContext)
+        {
+            FooddbContext = FoodtekDbContext;
+        }
 
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] SignUpInputDTO input)
