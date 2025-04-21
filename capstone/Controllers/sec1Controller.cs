@@ -89,7 +89,8 @@ namespace capstone.Controllers
                     command.Parameters.AddWithValue("@Email", input.Email);
                     command.Parameters.AddWithValue("@PasswordHash", input.Password);
                     connection.Open();
-                    var result = command.ExecuteNonQuery();
+                    var result = (int)command.ExecuteScalar(); ;
+
                     connection.Close();
 
                     if (result > 0)
@@ -131,6 +132,10 @@ namespace capstone.Controllers
                         Otpcode = otp,
                         ExpiryDate = DateTime.UtcNow.AddMinutes(10)
                     };
+                    FooddbContext.Otps.Add(otpEntry);
+                    FooddbContext.SaveChanges();
+
+                    return Ok(new { message = "OTP sent", otp = otp });
                 }
                 return NotFound("Email not found.");
             }
@@ -174,6 +179,7 @@ namespace capstone.Controllers
                     if (ValidationHelper.IsValidPassword(input.NewPassword))
                     {
                         user.PasswordHash = input.NewPassword;
+                        FooddbContext.SaveChanges();
                     }
                     else
                     {
